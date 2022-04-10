@@ -2,42 +2,42 @@
 #include <cmath>
 using namespace std;
 
-double temperature_calculation(double altitude_calc1) {
+double temperature_calculation(double altitude) {
     double temperature;
-    if (altitude_calc1 > 25000) {
-        temperature = -131.21 + (0.00299 * altitude_calc1);
+    if (altitude > 25000) {
+        temperature = -131.21 + (0.00299 * altitude);
     }
-    else if (altitude_calc1 <= 25000 && altitude_calc1 >= 11000) {
+    else if (altitude <= 25000 && altitude >= 11000) {
         temperature = -56.46;
     }
     else {
-        temperature = 15.04 - (0.00649 * altitude_calc1);
+        temperature = 15.04 - (0.00649 * altitude);
     }
     return temperature;
 };
 
-double pressure_calculation(double temperature_for_pressure, double altitude_calc2) {
+double pressure_calculation(double temperature, double altitude) {
     double pressure, x;
-    if (altitude_calc2 > 25000) {
-        pressure = 2.488 * pow(((temperature_for_pressure + 273.1)/216.6),-11.388);
+    if (altitude > 25000) {
+        pressure = 2.488 * pow(((temperature + 273.1)/216.6),-11.388);
     }
-    else if (altitude_calc2 <= 25000 && altitude_calc2 >= 11000) {
-        x = 1.73 - (0.000157 * altitude_calc2);
+    else if (altitude <= 25000 && altitude >= 11000) {
+        x = 1.73 - (0.000157 * altitude);
         pressure = 22.65 * exp(x);
     }
     else {
-        pressure = 101.29 * pow(((temperature_for_pressure + 273.1)/288.08),5.256);
+        pressure = 101.29 * pow(((temperature + 273.1)/288.08),5.256);
     }
     return pressure;
 };
 
-double density_calculation(double pressure_calc, double temp_calc) {
-    double density = (pressure_calc/(0.2869 * (temp_calc + 273.1)));
+double density_calculation(double pressure, double temperature) {
+    double density = (pressure/(0.2869 * (temperature + 273.1)));
     return density;
 };
 
-double cross_sectional_area_calculation(double diameter_calc) {
-    double cross_sectional_area = M_PI * ((diameter_calc/2) * (diameter_calc/2));
+double cross_sectional_area_calculation(double diameter) {
+    double cross_sectional_area = M_PI * ((diameter/2) * (diameter/2));
     return cross_sectional_area;
 };
 
