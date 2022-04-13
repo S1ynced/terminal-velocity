@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <iomanip>
 using namespace std;
 
 double temperature_calculation(double altitude) {
@@ -45,46 +46,42 @@ int main() {
 
     double altitude, vehicle_mass, drag_coefficient, diameter, terminal_velocity;
 
-    cout << "Enter the Altitude (m): ";
-    cin >> altitude;
-    cout << "Enter the Vehicle Mass: ";
+    cout << "Enter Vehicle Mass: ";
     cin >> vehicle_mass;
     cout << "Enter Vehicle Drag Co-Efficient: ";
     cin >> drag_coefficient;
     cout << "Enter Vehicle Diameter: ";
     cin >> diameter;
-
-    double temperature = temperature_calculation(altitude);
-    double pressure = pressure_calculation(temperature,altitude);
-    double density = density_calculation(pressure,temperature);
-    double cross_sectional_area = cross_sectional_area_calculation(diameter);
-
-    double numerator = 2 * vehicle_mass * 9.81;
-    double denominator = density * cross_sectional_area * drag_coefficient;
-    double terminal_velocity_calculation = (numerator/denominator);
     cout << endl;
 
-//  Altitude in Kilometre
-    double altitude_km = altitude/1000;
+/*  
+    cout << "Enter the Altitude (m): ";
+    cin >> altitude;
 
-    cout << "Altitude (KM): " << altitude_km << endl;
-//  Return temperature based on altitude.
-    cout << "Temperature (C): "<< temperature << endl;
+*/
 
-//  Return Pressure based on altitude.
-    cout << "Pressure (K-pa): "<< pressure << endl;
+    cout    <<"Altitude (M)"<<setw(23)<<"Temperature (C)"<<setw(23)<<"Pressure (K-Pa)"<<setw(25)
+            <<"Density (kg/cu m)"<<setw(32)<<"Terminal Velocity (KM/H)"<<endl<<endl;
 
-// Return Density based on altitude.
-    cout << "Density (Kg/cu m): "<< density << endl;
+    for (altitude = 80000; altitude >= 0; altitude -=5000){ 
 
-//  Return Cross-Sectional Area.
-    cout << "Cross Sectional Area: "<< cross_sectional_area <<endl;
+        double temperature = temperature_calculation(altitude);
+        double pressure = pressure_calculation(temperature,altitude);
+        double density = density_calculation(pressure,temperature);
+        double cross_sectional_area = cross_sectional_area_calculation(diameter);
 
-    terminal_velocity = sqrt(terminal_velocity_calculation);
-//  cout << endl << "Terminal Velocity: "<< terminal_velocity << " m/s" << endl;
-    terminal_velocity = terminal_velocity * (18/5);
-    cout << endl << "Terminal Velocity: "<< terminal_velocity <<" KM/H" << endl;
+        double numerator = 2 * vehicle_mass * 9.81;
+        double denominator = density * cross_sectional_area * drag_coefficient;
+        double terminal_velocity_calculation = (numerator/denominator);
+        terminal_velocity = sqrt(terminal_velocity_calculation);
+//      cout << endl << "Terminal Velocity: "<< terminal_velocity << " m/s" << endl;
+        terminal_velocity = terminal_velocity * (18/5);
+
+        cout    <<setw(7)<<altitude<<setw(23)<<temperature<<setw(24)<<pressure<<setw(24)<<density
+                <<setw(26)<<terminal_velocity<<endl;
+    }
 
     cout << endl;
+    system("pause");
     return 0;
 }
