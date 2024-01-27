@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <iomanip>
+#include <corecrt_math_defines.h>
 using namespace std;
 
 double temperature_calculation(double altitude) {
