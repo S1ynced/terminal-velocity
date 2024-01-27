@@ -1,7 +1,10 @@
 #include <iostream>
 #include <cmath>
 #include <iomanip>
-#include <corecrt_math_defines.h>
+#include <thread>
+#include <windows.h>
+# define M_PI 3.14159265358979323846  /* pi */
+
 using namespace std;
 
 double temperature_calculation(double altitude) {
@@ -39,47 +42,93 @@ double density_calculation(double pressure, double temperature) {
 };
 
 double cross_sectional_area_calculation(double diameter) {
-    double cross_sectional_area = M_PI * ((diameter/2) * (diameter/2));
+    double cross_sectional_area = (M_PI / 4) * (diameter * diameter);
     return cross_sectional_area;
 };
 
 int main() {
 
-    double altitude, vehicle_mass, drag_coefficient, diameter, terminal_velocity;
+     SetConsoleTitle("Terminal Velocity");
 
-    cout << "Enter Vehicle Mass: ";
+    double altitude, vehicle_mass, terminal_velocity, drag_coefficient, diameter;
+
+    cout << "Enter Vehicle Mass (kg): ";
     cin >> vehicle_mass;
+    cout << "Enter Vehicle Diameter (m): ";
+    cin >> diameter;
     cout << "Enter Vehicle Drag Co-Efficient: ";
     cin >> drag_coefficient;
-    cout << "Enter Vehicle Diameter: ";
-    cin >> diameter;
     cout << endl;
 
-/*  
-    cout << "Enter the Altitude (m): ";
-    cin >> altitude;
+    cout << "Altitude (km)" << setw(23) << "Temperature (C)" << setw(23) << "Pressure (K-Pa)" << setw(25)
+         << "Density (kg/cu m)" << setw(32) << "Terminal Velocity (KM/H)" << endl << endl;
 
-*/
-
-    cout    <<"Altitude (M)"<<setw(23)<<"Temperature (C)"<<setw(23)<<"Pressure (K-Pa)"<<setw(25)
-            <<"Density (kg/cu m)"<<setw(32)<<"Terminal Velocity (KM/H)"<<endl<<endl;
-
-    for (altitude = 80000; altitude >= 0; altitude -=5000){ 
-
+    for (altitude = 80000; altitude > 10000; altitude -= 5000) {
         double temperature = temperature_calculation(altitude);
-        double pressure = pressure_calculation(temperature,altitude);
-        double density = density_calculation(pressure,temperature);
+        double pressure = pressure_calculation(temperature, altitude);
+        double density = density_calculation(pressure, temperature);
         double cross_sectional_area = cross_sectional_area_calculation(diameter);
 
         double numerator = 2 * vehicle_mass * 9.81;
         double denominator = density * cross_sectional_area * drag_coefficient;
-        double terminal_velocity_calculation = (numerator/denominator);
+        double terminal_velocity_calculation = (numerator / denominator);
         terminal_velocity = sqrt(terminal_velocity_calculation);
-//      cout << endl << "Terminal Velocity: "<< terminal_velocity << " m/s" << endl;
-        terminal_velocity = terminal_velocity * (18/5);
+        terminal_velocity = terminal_velocity * (18 / 5);
 
-        cout    <<setw(7)<<altitude<<setw(23)<<temperature<<setw(24)<<pressure<<setw(24)<<density
-                <<setw(26)<<terminal_velocity<<endl;
+        this_thread::sleep_for(1s);
+
+        cout << fixed
+             << setw(7) << setprecision(0) << altitude / 1000
+             << setw(25);
+
+        // Setting temperature 'Red'
+        if (temperature < 0) {
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED);
+        }
+
+        cout << setprecision(2) << temperature;
+
+        // Reseting text color to cyan
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+
+        cout << setw(25) << setprecision(2) << pressure
+             << setw(25) << setprecision(2) << density
+             << setw(25) << setprecision(2) << terminal_velocity
+             << endl;
+    }
+
+    for (altitude = 10000; altitude >= 0; altitude -= 1000) {
+        double temperature = temperature_calculation(altitude);
+        double pressure = pressure_calculation(temperature, altitude);
+        double density = density_calculation(pressure, temperature);
+        double cross_sectional_area = cross_sectional_area_calculation(diameter);
+
+        double numerator = 2 * vehicle_mass * 9.81;
+        double denominator = density * cross_sectional_area * drag_coefficient;
+        double terminal_velocity_calculation = (numerator / denominator);
+        terminal_velocity = sqrt(terminal_velocity_calculation);
+        terminal_velocity = terminal_velocity * (18 / 5);
+
+        this_thread::sleep_for(1s);
+
+        cout << fixed
+             << setw(7) << setprecision(0) << altitude / 1000
+             << setw(25);
+
+        // Setting temperature 'Red'
+        if (temperature < 0) {
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED);
+        }
+
+        cout << setprecision(2) << temperature;
+
+        // Reseting text color to cyan
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+
+        cout << setw(25) << setprecision(2) << pressure
+             << setw(25) << setprecision(2) << density
+             << setw(25) << setprecision(1) << terminal_velocity
+             << endl;
     }
 
     cout << endl;
